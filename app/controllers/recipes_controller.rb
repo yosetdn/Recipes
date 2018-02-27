@@ -1,10 +1,11 @@
 class RecipesController < ApplicationController
+  before_action :set_param,only:[:show,:edit,:update]
+
   def index
     @recipes = Recipe.all
   end
 
   def show
-    @recipe = Recipe.find(params[:id])
   end
 
   def new
@@ -22,9 +23,27 @@ class RecipesController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @recipe.update(recipe_params)
+      flash[:success]="Your recipe was edited succesfully"
+      redirect_to recipe_path(@recipe)
+    else
+      render 'edit'
+    end
+  end
+
 private
   def recipe_params
       params.require(:recipe).permit(:name,:description)
   end
+
+  def set_param
+    @recipe = Recipe.find(params[:id])
+  end
+
+
 
 end
